@@ -127,29 +127,3 @@ void Recorder::save(){
 bool Recorder::isRecording(){
     return bRecording;
 }
-
-ofxXmlSettings Recorder::parse(ofxOscMessage message) {
-    string result;
-    result = message.getAddress();
-    result += ": [";
-    
-    for(int i = 0; i < message.getNumArgs(); i++) {
-        result += " " + message.getArgTypeName(i) + ":";
-        
-        switch(message.getArgType(i)) {
-            case OFXOSC_TYPE_INT32:
-                result += ofToString(message.getArgAsInt32(i));
-                break;
-            case OFXOSC_TYPE_FLOAT:
-                result += ofToString(message.getArgAsFloat(i));
-                break;
-            case OFXOSC_TYPE_STRING:
-                result += message.getArgAsString(i);
-                break;
-            default:
-                result += "unknown";
-        }
-        result += " ";
-    };
-    return result + "]";
-}

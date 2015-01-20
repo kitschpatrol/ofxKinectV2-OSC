@@ -5,10 +5,11 @@ void ofxKinectV2OSC::setup(int port, ofTrueTypeFont &_font, string file) {
     setFont(_font);
     receiver.setup(port);
     mapper.mapTo(&skeletons);
-    recorder.setup("testing");
     if(file != ""){
         player.setup(file);
         playFromFile = true;
+    }else{
+        recorder.setup("testing");
     }
 }
 
