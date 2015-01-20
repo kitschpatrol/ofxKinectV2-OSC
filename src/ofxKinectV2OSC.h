@@ -8,7 +8,7 @@
 #include "Recorder/Player.h"
 class ofxKinectV2OSC {
 public:
-	void setup(int port, ofTrueTypeFont &_font, bool playback = false);
+	void setup(int port, ofTrueTypeFont &_font, string file ="");
 	void update();
 	void setSmoothing(SmoothingTechnique technique);
     void setFont(ofTrueTypeFont _font);

@@ -1,14 +1,14 @@
 #include "ofxKinectV2OSC.h"
 
-void ofxKinectV2OSC::setup(int port, ofTrueTypeFont &_font, bool playback) {
+void ofxKinectV2OSC::setup(int port, ofTrueTypeFont &_font, string file) {
     isDebugEnabled = false;
     setFont(_font);
     receiver.setup(port);
     mapper.mapTo(&skeletons);
     recorder.setup("testing");
-    playFromFile = playback;
-    if(playFromFile){
-        player.setup("testing2015-01-20-14-45-54-974.xml");
+    if(file != ""){
+        player.setup(file);
+        playFromFile = true;
     }
 }
 
