@@ -45,8 +45,10 @@ void BodyRenderer::toggleRanges() {
 }
 
 void BodyRenderer::drawHands() {
-	drawHand(skeleton->getLeftHand(), skeleton->getHandLeft());
-	drawHand(skeleton->getRightHand(), skeleton->getHandRight());
+    if(skeleton){
+        drawHand(skeleton->getLeftHand(), skeleton->getHandLeft());
+        drawHand(skeleton->getRightHand(), skeleton->getHandRight());
+    }
 }
 
 void BodyRenderer::drawHand(Hand hand, Joint handJoint) {

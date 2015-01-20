@@ -85,7 +85,11 @@ void Joint::trimHistory() {
 }
 
 ofVec3f Joint::currentPoint() {
+    if (pointHistory.size() > 0){
 	return pointHistory.at(0);
+    } else {
+        return ofPoint(0,0,0);
+    }
 }
 
 ofVec3f Joint::simpleMovingAveragePoint() {

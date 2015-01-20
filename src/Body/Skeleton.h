@@ -52,8 +52,13 @@ public:
     ofRectangle getRightHandRange();
     ofVec2f getLeftHandNormal();
     ofVec2f getRightHandNormal();
+    
+    void transform(ofMatrix4x4 mat);
+    vector<Joint> getJoints();
+    map<string, Joint> getJointsMap();
 
 protected:
+    void setupMap();
     void setLeftHand(Hand &hand);
     void setRightHand(Hand &hand);
     void setThumbRight(Joint &joint);
@@ -114,4 +119,7 @@ protected:
 	Joint handTipLeft;
 	Joint thumbLeft;
 	Joint handTipRight;
+    
+    map<string, Joint*> joints;
+    map<string, Hand*> hands;
 };

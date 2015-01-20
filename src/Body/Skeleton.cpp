@@ -2,7 +2,42 @@
 
 void Skeleton::init(string _bodyId) {
 	bodyId = _bodyId;
+    setupMap();
     resetFreshness();
+}
+void Skeleton::setupMap(){
+    string jointArray[] = {
+        "SpineBase",
+        "SpineMid",
+        "Neck",
+        "Head",
+        "ShoulderLeft",
+        "ElbowLeft",
+        "WristLeft",
+        "HandLeft",
+        "ShoulderRight",
+        "ElbowRight",
+        "WristRight",
+        "HandRight",
+        "HipLeft",
+        "KneeLeft",
+        "AnkleLeft"	,
+        "FootLeft"	,
+        "HipRight"	,
+        "KneeRight"	,
+        "AnkleRight"	,
+        "FootRight"	,
+        "SpineShoulder",
+        "HandTipLeft"	,
+        "ThumbLeft"	,
+        "HandTipRight",
+        "ThumbRight"	,
+    };
+    for(int i = 0 ; i < 25; i++){
+        joints[jointArray[i]] = new Joint();
+    }
+    hands["Left"] = new Hand();
+    hands["Right"] = new Hand();
 }
 
 void Skeleton::setSmoothing(SmoothingTechnique technique) {
@@ -26,75 +61,87 @@ bool Skeleton::isCloserThan(Skeleton* other) {
 }
 
 void Skeleton::setHand(Hand hand) {
+    string index = "";
 	if(hand.isLeft()) {
-		setLeftHand(hand);
+        leftHand.clone(&hand);
 	} else {
-		setRightHand(hand);
+        rightHand.clone(&hand);
 	}
 }
+
+void Skeleton::transform(ofMatrix4x4 mat){
+    for(map<string, Joint*>::iterator iter = joints.begin(); iter != joints.end(); ++iter){
+        ofVec3f pt = iter->second->getPoint();
+        iter->second->setPoint(pt*mat);
+    }
+}
+
 
 void Skeleton::setJoint(Joint joint) {
 	string jointType = joint.getType();
 
-	if (jointType == "ThumbRight") {
-		setThumbRight(joint);
-	} else if (jointType == "SpineBase") {
-		setSpineBase(joint);
-	} else if (jointType == "SpineMid") {
-		setSpineMid(joint);
-	} else if (jointType == "Neck") {
-		setNeck(joint);
-	} else if (jointType == "Head") {
-		setHead(joint);
-	} else if (jointType == "ShoulderLeft") {
-		setShoulderLeft(joint);
-	} else if (jointType == "ElbowLeft") {
-		setElbowLeft(joint);
-	} else if (jointType == "WristLeft") {
-		setWristLeft(joint);
-	} else if (jointType == "HandLeft") {
-		setHandLeft(joint);
-	} else if (jointType == "ShoulderRight") {
-		setShoulderRight(joint);
-	} else if (jointType == "ElbowRight") {
-		setElbowRight(joint);
-	} else if (jointType == "WristRight") {
-		setWristRight(joint);
-	} else if (jointType == "HandRight") {
-		setHandRight(joint);
-	} else if (jointType == "HipLeft") {
-		setHipLeft(joint);
-	} else if (jointType == "KneeLeft") {
-		setKneeLeft(joint);
-	} else if (jointType == "AnkleLeft") {
-		setAnkleLeft(joint);
-	} else if (jointType == "FootLeft") {
-		setFootLeft(joint);
-	} else if (jointType == "HipRight") {
-		setHipRight(joint);
-	} else if (jointType == "KneeRight") {
-		setKneeRight(joint);
-	} else if (jointType == "AnkleRight") {
-		setAnkleRight(joint);
-	} else if (jointType == "FootRight") {
-		setFootRight(joint);
-	} else if (jointType == "SpineShoulder") {
-		setSpineShoulder(joint);
-	} else if (jointType == "HandTipLeft") {
-		setHandTipLeft(joint);
-	} else if (jointType == "ThumbLeft") {
-		setThumbLeft(joint);
-	} else if (jointType == "HandTipRight") {
-		setHandTipRight(joint);
-	}
+    joints[jointType]->clone(&joint);
+    resetFreshness();
+    
+//	if (jointType == "ThumbRight") {
+//		setThumbRight(joint);
+//	} else if (jointType == "SpineBase") {
+//		setSpineBase(joint);
+//	} else if (jointType == "SpineMid") {
+//		setSpineMid(joint);
+//	} else if (jointType == "Neck") {
+//		setNeck(joint);
+//	} else if (jointType == "Head") {
+//		setHead(joint);
+//	} else if (jointType == "ShoulderLeft") {
+//		setShoulderLeft(joint);
+//	} else if (jointType == "ElbowLeft") {
+//		setElbowLeft(joint);
+//	} else if (jointType == "WristLeft") {
+//		setWristLeft(joint);
+//	} else if (jointType == "HandLeft") {
+//		setHandLeft(joint);
+//	} else if (jointType == "ShoulderRight") {
+//		setShoulderRight(joint);
+//	} else if (jointType == "ElbowRight") {
+//		setElbowRight(joint);
+//	} else if (jointType == "WristRight") {
+//		setWristRight(joint);
+//	} else if (jointType == "HandRight") {
+//		setHandRight(joint);
+//	} else if (jointType == "HipLeft") {
+//		setHipLeft(joint);
+//	} else if (jointType == "KneeLeft") {
+//		setKneeLeft(joint);
+//	} else if (jointType == "AnkleLeft") {
+//		setAnkleLeft(joint);
+//	} else if (jointType == "FootLeft") {
+//		setFootLeft(joint);
+//	} else if (jointType == "HipRight") {
+//		setHipRight(joint);
+//	} else if (jointType == "KneeRight") {
+//		setKneeRight(joint);
+//	} else if (jointType == "AnkleRight") {
+//		setAnkleRight(joint);
+//	} else if (jointType == "FootRight") {
+//		setFootRight(joint);
+//	} else if (jointType == "SpineShoulder") {
+//		setSpineShoulder(joint);
+//	} else if (jointType == "HandTipLeft") {
+//		setHandTipLeft(joint);
+//	} else if (jointType == "ThumbLeft") {
+//		setThumbLeft(joint);
+//	} else if (jointType == "HandTipRight") {
+//		setHandTipRight(joint);
+//	}
 }
 
 Hand Skeleton::getLeftHand() {
-	return leftHand;
+	return *hands["Left"];
 }
 
 Hand Skeleton::getRightHand() {
-	return rightHand;
+	return *hands["Right"];
 }
 
 string Skeleton::getBodyId() {
@@ -102,120 +149,126 @@ string Skeleton::getBodyId() {
 }
 
 Joint Skeleton::getThumbRight() {
-	return thumbRight;
+	return *joints["ThumbRight"];
 }
 
 Joint Skeleton::getSpineBase() {
-	return spineBase;
+	return *joints["SpineBase"];
 }
 
 Joint Skeleton::getSpineMid() {
-	return spineMid;
+	return *joints["SpineMid"];
 }
 
 Joint Skeleton::getNeck() {
-	return neck;
+	return *joints["Neck"];
 }
 
 Joint Skeleton::getHead() {
-	return head;
+	return *joints["Head"];
 }
 
 Joint Skeleton::getShoulderLeft() {
-	return shoulderLeft;
+	return *joints["ShoulderLeft"];
 }
 
 Joint Skeleton::getElbowLeft() {
-	return elbowLeft;
+	return *joints["ElbowLeft"];
 }
 
 Joint Skeleton::getWristLeft() {
-	return wristLeft;
+	return *joints["WristLeft"];
 }
 
 Joint Skeleton::getHandLeft() {
-	return handLeft;
+	return *joints["HandLeft"];
 }
 
 Joint Skeleton::getShoulderRight() {
-	return shoulderRight;
+    return *joints["ShoulderRight"];;
 }
 
 Joint Skeleton::getElbowRight() {
-	return elbowRight;
+	return *joints["ElbowRight"];
 }
 
 Joint Skeleton::getWristRight() {
-	return wristRight;
+	return *joints["WristRight"];
 }
 
 Joint Skeleton::getHandRight() {
-	return handRight;
+	return *joints["HandRight"];
 }
 
 Joint Skeleton::getHipLeft() {
-	return hipLeft;
+	return *joints["HipLeft"];
 }
 
 Joint Skeleton::getKneeLeft() {
-	return kneeLeft;
+	return *joints["KneeLeft"];
 }
 
 Joint Skeleton::getAnkleLeft() {
-	return ankleLeft;
+	return *joints["AnkleLeft"];
 }
 
 Joint Skeleton::getFootLeft() {
-	return footLeft;
+	return *joints["FootLeft"];
 }
 
 Joint Skeleton::getHipRight() {
-	return hipRight;
+	return *joints["HipRight"];
 }
 
 Joint Skeleton::getKneeRight() {
-	return kneeRight;
+	return *joints["KneeRight"];
 }
 
 Joint Skeleton::getAnkleRight() {
-	return ankleRight;
+	return *joints["AnkleRight"];
 }
 
 Joint Skeleton::getFootRight() {
-	return footRight;
+	return *joints["FootRight"];
 }
 
 Joint Skeleton::getSpineShoulder() {
-	return spineShoulder;
+	return *joints["SpineShoulder"];
 }
 
 Joint Skeleton::getHandTipLeft() {
-	return handTipLeft;
+	return *joints["HandTipLeft"];
 }
 
 Joint Skeleton::getThumbLeft() {
-	return thumbLeft;
+	return *joints["ThumbLeft"];
 }
 
 Joint Skeleton::getHandTipRight() {
-    return handTipRight;
+    return *joints["HandTipRight"];
 }
 
 ofRectangle Skeleton::getLeftHandRange() {
-    return interpreter.leftHandRange(&spineShoulder, &shoulderLeft);
+    return interpreter.leftHandRange(joints["SpineSholder"], joints["ShoulderLeft"]);
 }
 
 ofRectangle Skeleton::getRightHandRange() {
-    return interpreter.rightHandRange(&spineShoulder, &shoulderRight);
+    return interpreter.leftHandRange(joints["SpineSholder"], joints["ShoulderRight"]);
 }
 
 ofVec2f Skeleton::getLeftHandNormal() {
-    return interpreter.leftHandNormal(&handLeft, &spineShoulder, &shoulderLeft);
+    return interpreter.leftHandNormal(joints["HandLeft"], joints["SpineSholder"], joints["ShoulderLeft"]);
 }
 
 ofVec2f Skeleton::getRightHandNormal() {
-    return interpreter.rightHandNormal(&handRight, &spineShoulder, &shoulderRight);
+    return interpreter.rightHandNormal(joints["HandRight"], joints["SpineSholder"], joints["ShoulderRight"]);
+
 }
+
+//void Skeleton::setJoint(Joint &joint){
+//    joints[joint.getType()].clone(joint);
+//}
+
 
 void Skeleton::setLeftHand(Hand &hand) {
     leftHand.clone(&hand);
