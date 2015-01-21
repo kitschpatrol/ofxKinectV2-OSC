@@ -12,24 +12,26 @@
 #include "../Body/Skeleton.h"
 #include "../Body/Joint.h"
 #include "../Body/Hand.h"
-class Player{
+#include "ofxOsc.h"
+class Player :public ofThread{
 public:
     Player();
     ~Player();
     void setup(string path);
-    void update(ofEventArgs & args);
-    void draw();
-    vector<Skeleton> getSkeleton();
+    void start();
+    void stop();
+    void threadedFunction();
 private:
     ofxXmlSettings file;
     bool bPlay;
-    float startTime;
-    float currentTime;
-    float previousTime;
-    float endTime;
+    unsigned long long  startTime;
+    unsigned long long  currentTime;
+    unsigned long long  previousTime;
+    unsigned long long duration;
     int numBodies;
     int numTags;
     int startTag;
     int endTag;
-    map<string, Skeleton> bodies;
+    map<unsigned long long, string > timeCodedPaths;
+    ofxOscSender sender;
 };

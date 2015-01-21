@@ -23,6 +23,7 @@ public:
     void drawLeftArm();
     void drawRightLeg();
     void drawLeftLeg();
+    void drawCapture();
 	virtual void drawBone(Joint joint1, Joint joint2);
 
 	void drawJoints();
@@ -42,4 +43,5 @@ protected:
     string normalReport;
 
 	bool isDrawHandsEnabled, isDrawBonesEnabled, isDrawJointsEnabled, isDrawRangesEnabled, isFontEnabled;
+    bool isDrawCapture;
 };

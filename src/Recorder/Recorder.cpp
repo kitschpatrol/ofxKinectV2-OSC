@@ -16,111 +16,133 @@ void Recorder::setup(string path){
     if(!ofIsStringInString(fileName, ".xml")){
         fileName+=".xml";
     }
-    
+    startTime = ofGetElapsedTimeMillis();
     //    recording.loadFile(fileName);
     recording.addTag("recording");
     recording.pushTag("recording");
     {
-        recording.addValue("spec", "0.0-beta");
-        recording.addTag("kinectV2");
-        recording.pushTag("kinectV2");
-        {
-            recording.addTag("header");
-            recording.pushTag("header");//<headers>
-            {
-                recording.addTag("client");//<client>
-                recording.pushTag("client");
-                {
-                    recording.addValue("name", "KinectV2-OSC");
-                    recording.addValue("version", 1.0);
-                    recording.addValue("username", "beta-user");
-                }
-                recording.popTag();//</client>
-                
-                
-                
-                recording.addTag("offset");
-                recording.pushTag("offset");//<offset>
-                {
-                    recording.addValue("x", 0);
-                    recording.addValue("y", 0);
-                    recording.addValue("z", 0);
-                }
-                recording.popTag();//</offset>
-                
-                recording.addTag("up");
-                recording.pushTag("up");//<up>
-                {
-                    recording.addValue("x", 0);
-                    recording.addValue("y", -1);
-                    recording.addValue("z", 0);
-                }
-                recording.popTag();//</up>
-                
-                recording.addTag("screenBounds");
-                recording.pushTag("screenBounds");//<screenBounds>
-                {
-                    recording.addValue("x", ofGetWidth());
-                    recording.addValue("y", ofGetHeight());
-                    recording.addValue("z", 0);
-                }
-                recording.popTag();//</screenBounds>
-            }recording.popTag();//</header>
-        }recording.popTag();
+        recording.addValue("spec", "0.0.1");
+        recording.addValue("kinectV2-OSC", "beta");
+        recording.addValue("start-time", startTime);
+        
     }recording.popTag();
     
     lastMessageNumber = 0;
-    startTime = ofGetElapsedTimef();
-    recording.saveFile(fileName);
 }
+
+//void Recorder::start(){
+//    startThread(false);
+//}
+//
+//void Recorder::stop(){
+//    stopThread();
+//}
+
+//void Recorder::threadedFunction(){
+//    while(isThreadRunning()){
+//        if(lock()){
+//            if(buffer.size() > 0){
+//                int time = timeBuffer.front();
+//                parser.setMessage(buffer.front());
+//                if(parser.isBody() && !parser.isHand()) {
+//                    ofxXmlSettings frame;
+//                    
+//                    int bodyCount = frame.addTag("body");
+//                    frame.pushTag("body", bodyCount);
+//                    {
+//                        frame.addValue("id", parser.parseBodyId());
+//                        frame.addValue("time", time);
+//                        if(parser.isJoint()){
+//                            int numJoint = frame.addTag("joint");
+//                            frame.pushTag("joint", numJoint);
+//                            {
+//                                Joint j = parser.parseJoint();
+//                                frame.addValue("type", j.getType());
+//                                frame.addValue("tracked", j.getTrackingState()==0?"Tracked":"Inferred");
+//                                frame.addValue("x", ofMap(j.getPoint().x, 0, ofGetWidth(), -1, 1, true));
+//                                frame.addValue("y", ofMap(j.getPoint().y, ofGetHeight(), 0, -1, 1, true));
+//                                frame.addValue("z", ofMap(j.getPoint().z, 30, 10, 0, 2, true));
+//                            }
+//                            frame.popTag();//joint
+//                        }
+//                    }frame.popTag();//body
+//                    string file = parser.parseBodyId()+"-"+ofToString(time)+".xml";
+//                    frame.save(file);
+//                    recording.pushTag("recording");
+//                    {
+//                        lastMessageNumber = recording.addTag("file");
+//                        recording.pushTag("file", lastMessageNumber);
+//                        {
+//                            recording.addValue("path", file);
+//                            recording.addValue("time", time);
+//                        }
+//                        recording.popTag();
+//                    }
+//                    recording.popTag();
+//                    
+//                }
+//                buffer.pop_front();
+//                timeBuffer.pop_front();
+//            }
+//            unlock();
+//        }
+//    }
+//}
+
 void Recorder::addMessage(ofxOscMessage &message){
-    //if(bRecording){
-    float time = ofGetElapsedTimef();
+    int time = ofGetElapsedTimeMillis();
     parser.setMessage(message);
     if(parser.isBody() && !parser.isHand()) {
+        ofxXmlSettings frame;
+        
+        int bodyCount = frame.addTag("body");
+        frame.pushTag("body", bodyCount);
+        {
+            frame.addValue("id", parser.parseBodyId());
+            frame.addValue("time", time);
+            if(parser.isJoint()){
+                int numJoint = frame.addTag("joint");
+                frame.pushTag("joint", numJoint);
+                {
+                    Joint j = parser.parseJoint();
+                    frame.addValue("type", j.getType());
+                    frame.addValue("tracked", j.getTrackingState()==0?"Tracked":"Inferred");
+                    frame.addValue("x", ofMap(j.getPoint().x, 0, ofGetWidth(), -1, 1, true));
+                    frame.addValue("y", ofMap(j.getPoint().y, ofGetHeight(), 0, -1, 1, true));
+                    frame.addValue("z", ofMap(j.getPoint().z, 30, 10, 0, 2, true));
+                }
+                frame.popTag();//joint
+            }
+        }frame.popTag();//body
+        string file = parser.parseBodyId()+"-"+ofToString(time)+".xml";
+        frame.save(file);
         recording.pushTag("recording");
         {
-            int bodyCount = recording.addTag("body");
-            recording.pushTag("body", bodyCount);
+            lastMessageNumber = recording.addTag("file");
+            recording.pushTag("file", lastMessageNumber);
             {
-                recording.addValue("id", parser.parseBodyId());
-                recording.addValue("time", time-startTime);
-                if(parser.isJoint()){
-                    int numJoint = recording.addTag("joint");
-                    recording.pushTag("joint", numJoint);
-                    {
-                        Joint j = parser.parseJoint();
-                        recording.addValue("type", j.getType());
-                        recording.addValue("x", j.getPoint().x);
-                        recording.addValue("y", j.getPoint().y);
-                        recording.addValue("z", j.getPoint().z);
-                    }
-                    recording.popTag();//joint
-                }
-//                if(parser.isHand()){
-//                    int handCount = recording.addTag("hand");
-//                    recording.pushTag("hand", handCount);
-//                    {
-//                        Hand h = parser.parseHand();
-//                        
-//                        recording.addValue("confidence", h.getConfidence()==HIGH?1:0);
-//                        recording.addValue("position", h.getPosition()==LEFT?"left":"right");
-//                        recording.addValue("state", h.getState()==OPEN?"open":"closed");
-//                        
-//                    }
-//                    recording.popTag();//hand
-//                }
-            }recording.popTag();//body
-        }recording.popTag();//recording
+                recording.addValue("path", file);
+                recording.addValue("time", time);
+            }
+            recording.popTag();
+        }
+        recording.popTag();
+        
     }
-    //    save();
-    //}
 }
 
 void Recorder::save(){
     while(recording.getPushLevel() > 0){
         recording.popTag();
     }
+    recording.pushTag("recording");
+    {
+        endTime = ofGetElapsedTimeMillis();
+        recording.addValue("endTime", endTime);
+        recording.addValue("duration", endTime - startTime);
+    }
+    recording.popTag();
+    
     recording.save(fileName);
 }
 

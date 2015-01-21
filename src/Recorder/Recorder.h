@@ -11,21 +11,25 @@
 #include "ofxOsc.h"
 #include "ofxXmlSettings.h"
 #include "../DataTransform/Parser.h"
-class Recorder{
+class Recorder {
 public:
     Recorder();
     void setup(string path);
     void addMessage(ofxOscMessage &message);
     void save();
     bool isRecording();
-    
+//    void start();
+//    void stop();
+//    void threadedFunction();
 private:
     ofxXmlSettings parse(ofxOscMessage message);
     string fileName;
     bool bRecording;
-    float startTime;
-    float endTime;
+    int startTime;
+    int endTime;
     int lastMessageNumber;
     ofxXmlSettings recording;
     Parser parser;
+    deque<ofxOscMessage> buffer;
+    deque<unsigned long long> timeBuffer;
 };

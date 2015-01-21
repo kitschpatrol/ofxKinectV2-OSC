@@ -60,11 +60,14 @@ void ofApp::draw(){
 }
 
 void ofApp::keyPressed(int key){
-	if(key == 'd') kinect.toggleDebug();
-	if(key == 'j') renderer.toggleJoints();
-    if(key == 'b') renderer.toggleBones();
-    if(key == 'h') renderer.toggleHands();
-    if(key == 'r') renderer.toggleRanges();
+//	if(key == 'd') kinect.toggleDebug();
+//	if(key == 'j') renderer.toggleJoints();
+//    if(key == 'b') renderer.toggleBones();
+//    if(key == 'h') renderer.toggleHands();
+//    if(key == 'r') renderer.toggleRanges();
+    if(key == ' '){
+        kinect.saveRecording();
+    }
 }
 
 void ofApp::keyReleased(int key){
@@ -93,6 +96,10 @@ void ofApp::windowResized(int w, int h){
 
 void ofApp::gotMessage(ofMessage msg){
 
+}
+
+void ofApp::exit(){
+    kinect.saveRecording();
 }
 
 void ofApp::dragEvent(ofDragInfo dragInfo){ 

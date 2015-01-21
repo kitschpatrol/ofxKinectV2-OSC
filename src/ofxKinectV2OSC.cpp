@@ -5,22 +5,21 @@ void ofxKinectV2OSC::setup(int port, ofTrueTypeFont &_font, string file) {
     setFont(_font);
     receiver.setup(port);
     mapper.mapTo(&skeletons);
+    playFromFile = false;
+    ofLog()<<file<<endl;
     if(file != ""){
         player.setup(file);
         playFromFile = true;
     }else{
-        recorder.setup("testing");
+        //recorder.setup("testing");
     }
 }
 
 void ofxKinectV2OSC::update() {
-    if(!playFromFile){
-        parseOscMessages();
-        clearStaleSkeletons();
-    }else{
-        skeletons = player.getSkeleton();
-        clearStaleSkeletons();
-    }
+    
+    parseOscMessages();
+    clearStaleSkeletons();
+    
 }
 
 void ofxKinectV2OSC::setSmoothing(SmoothingTechnique technique) {
@@ -49,7 +48,13 @@ Skeleton* ofxKinectV2OSC::getNearestSkeleton() {
 }
 
 void ofxKinectV2OSC::saveRecording(){
-    recorder.save();
+    //    recorder.save();
+    if(!playFromFile){
+        //recorder.waitForThread();
+        recorder.save();
+    }else{
+        player.waitForThread();
+    }
 }
 
 bool ofxKinectV2OSC::hasSkeletons() {
@@ -61,7 +66,9 @@ void ofxKinectV2OSC::parseOscMessages() {
         receiver.getNextMessage(&lastMessage);
         //logger.log(lastMessage);
         mapper.map(lastMessage);
-        recorder.addMessage(lastMessage);
+        if(!playFromFile){
+            //recorder.addMessage(lastMessage);
+        }
     }
 }
 
@@ -83,9 +90,6 @@ void ofxKinectV2OSC::drawDebug() {
         } else {
             ofDrawBitmapString(debug, 60, 60);
         }
-    }
-    if(playFromFile){
-        player.draw();
     }
 }
 

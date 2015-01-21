@@ -9,7 +9,7 @@ void Mapper::map(ofxOscMessage &_message) {
 
 	if(parser.isBody()) {
 		Skeleton* skeleton = getSkeleton(parser.parseBodyId());
-
+        
 		if(parser.isJoint()) {
 			skeleton->setJoint(parser.parseJoint());
 		} else if(parser.isHand()) {
@@ -37,7 +37,7 @@ Skeleton* Mapper::getSkeleton(string id) {
 
 Skeleton* Mapper::newSkeleton(string id) {
 	Skeleton skeleton;
-	skeleton.init(id);
+	skeleton.init(id, true);
 	skeleton.setSmoothing(defaultSmoothing);
 	skeletons->push_back(skeleton);
 	return &skeletons->at(skeletons->size()-1);

@@ -11,62 +11,72 @@ Player::Player(){
     
 }
 Player::~Player(){
-    ofRemoveListener(ofEvents().update, this, &Player::update);
+    
 }
 void Player::setup(string path){
-    ofLog()<<path<<endl;
     if(ofFile::doesFileExist(ofToDataPath(path))){
         bool loaded = file.load(ofToDataPath(path));
         if(loaded){
             bPlay = true;
-            startTime = ofGetElapsedTimef();
+            startTime = ofGetElapsedTimeMillis();
             file.pushTag("recording");
-            numTags = file.getNumTags("body");
+            numTags = file.getNumTags("file");
             ofLog()<<"Captured :"<<numTags<<" number of bodies"<<endl;
-            endTime = file.getValue("body:time", 0.0, numTags-1);
-            ofLog()<<"total time "<<endTime<<endl;
-            vector<string> ids;
+            duration = file.getValue("duration", 0);
+            ofLog()<<"total time "<<duration<<endl;
             for(int i = 0; i < numTags; i++){
-                if(find(ids.begin(), ids.end(),file.getValue("body:id", "", i))==ids.end()){
-                    ids.push_back(file.getValue("body:id", "", i));
-                    Skeleton & foo = bodies[ids.back()];
-                    foo.init(ids.back());
-                }
+                unsigned long long fooTime = file.getValue("file:time", 0, i);
+                timeCodedPaths[fooTime] = file.getValue("file:path", "", i);
             }
+            file.popTag();
             startTag = 0;
             endTag = numTags;
-            ofAddListener(ofEvents().update, this, &Player::update);
+            
+            sender.setup("127.0.0.1", 12345);
+            start();
         }
     }
 }
-void Player::update(ofEventArgs & args){
-    if(bPlay){
-        previousTime = currentTime;
-        currentTime = fmodf(ofGetElapsedTimef(), endTime);
-        if(currentTime < previousTime){
-            startTag = 0;
-        }
-        for(int i = startTag; i < numTags; i++){
-            float time = file.getValue("body:time", 0.0, i);
-            if(time > previousTime && time <= currentTime){
-                Joint j = Joint();
-                j.setPoint(ofVec3f(file.getValue("body:joint:x", 0, i), file.getValue("body:joint:y", 0, i), file.getValue("body:joint:z", 0, i)));
-                j.setType((file.getValue("body:joint:type", "", i)));
-                bodies[file.getValue("body:id", "", i)].setJoint(j);
-            }else if(time > currentTime){
-                startTag = i;
-                break;
+void Player::start(){
+    startThread();
+}
+
+void Player::stop(){
+    stopThread();
+}
+
+void Player::threadedFunction(){
+    while(isThreadRunning()){
+        if(lock()){
+            previousTime = currentTime;
+            currentTime = ofGetElapsedTimeMillis()%duration;
+            if(currentTime < previousTime){
+                startTag = 0;
             }
+            bool fooBar = false;
+            for(map<unsigned long long, string >::iterator iter = timeCodedPaths.begin(); iter != timeCodedPaths.end(); ++iter){
+                if(iter->first >= previousTime && iter->first <= currentTime){
+                    ofxXmlSettings currentMessage;
+                    currentMessage.load(ofToDataPath(iter->second));
+                    string id = currentMessage.getValue("body:id", "");
+                    float x = currentMessage.getValue("body:joint:x", 0.0);
+                    float y  = currentMessage.getValue("body:joint:y", 0.0);
+                    float z = currentMessage.getValue("body:joint:z", 0.0);
+                    string type = currentMessage.getValue("body:joint:type", "");
+                    string tracked = currentMessage.getValue("body:joint:tracked", "");
+                    ofxOscMessage b;
+                    b.setAddress("/bodies/"+id+"/joints/"+type+"/");
+                    b.addFloatArg(x);
+                    b.addFloatArg(y);
+                    b.addFloatArg(z);
+                    b.addStringArg(tracked);
+                    sender.sendMessage(b);
+                }else if(iter->first > currentTime){
+                    break;
+                }
+            }
+            unlock();
         }
     }
 }
-vector<Skeleton> Player::getSkeleton(){
-    vector<Skeleton> data;
-    for(map<string, Skeleton>::iterator iter = bodies.begin(); iter != bodies.end(); ++iter){
-        data.push_back(iter->second);
-    }
-    return data;
-}
-void Player::draw(){
-    ofDrawBitmapString("PLAYING BACK FROM FILE", ofGetWidth()-100, ofGetHeight()-100);
-}
+

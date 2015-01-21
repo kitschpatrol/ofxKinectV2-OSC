@@ -41,3 +41,5 @@ string Logger::parse(ofxOscMessage message) {
 	};
 	return result + "]";
 }
+
+

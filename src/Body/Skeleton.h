@@ -3,12 +3,12 @@
 #include "Interpreter.h"
 #include "Joint.h"
 #include "Hand.h"
-
+#include "SkeletonStruct.h"
 const int MAX_FRESHNESS = 12;
 
 class Skeleton {
 public:
-	void init(string _bodyId);
+	void init(string _bodyId, bool recording = false);
 	void setSmoothing(SmoothingTechnique technique);
     void update();
     void resetFreshness();
@@ -56,6 +56,7 @@ public:
     void transform(ofMatrix4x4 mat);
     vector<Joint> getJoints();
     map<string, Joint> getJointsMap();
+//    map<string, ofVec3f> pts;
 
 protected:
     void setupMap();
@@ -87,11 +88,15 @@ protected:
     void setThumbLeft(Joint &joint);
     void setHandTipRight(Joint &joint);
     
+//    void readFile(string file);
+    
     string bodyId;
     int freshness;
     Interpreter interpreter;
 	SmoothingTechnique smoothing;
     
+    SkeletonStruct saveSk;
+    bool recording;
 	Hand leftHand;
 	Hand rightHand;
 	Joint thumbRight;
@@ -122,4 +127,8 @@ protected:
     
     map<string, Joint*> joints;
     map<string, Hand*> hands;
+
+    
+    int index;
+    ofDirectory dir;
 };

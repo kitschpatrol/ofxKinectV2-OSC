@@ -1,7 +1,6 @@
 #include "Skeleton.h"
-
-void Skeleton::init(string _bodyId) {
-	bodyId = _bodyId;
+void Skeleton::init(string _bodyId, bool recording) {
+    bodyId = _bodyId;
     setupMap();
     resetFreshness();
 }
@@ -41,7 +40,7 @@ void Skeleton::setupMap(){
 }
 
 void Skeleton::setSmoothing(SmoothingTechnique technique) {
-	smoothing = technique;
+    smoothing = technique;
 }
 
 void Skeleton::update() {
@@ -62,11 +61,11 @@ bool Skeleton::isCloserThan(Skeleton* other) {
 
 void Skeleton::setHand(Hand hand) {
     string index = "";
-	if(hand.isLeft()) {
-        leftHand.clone(&hand);
-	} else {
-        rightHand.clone(&hand);
-	}
+    if(hand.isLeft()) {
+        hands["Left"]->clone(&hand);
+    } else {
+        hands["Right"]->clone(&hand);
+    }
 }
 
 void Skeleton::transform(ofMatrix4x4 mat){
@@ -78,110 +77,115 @@ void Skeleton::transform(ofMatrix4x4 mat){
 
 
 void Skeleton::setJoint(Joint joint) {
-	string jointType = joint.getType();
-
-    joints[jointType]->clone(&joint);
-    resetFreshness();
+    string jointType = joint.getType();
     
-//	if (jointType == "ThumbRight") {
-//		setThumbRight(joint);
-//	} else if (jointType == "SpineBase") {
-//		setSpineBase(joint);
-//	} else if (jointType == "SpineMid") {
-//		setSpineMid(joint);
-//	} else if (jointType == "Neck") {
-//		setNeck(joint);
-//	} else if (jointType == "Head") {
-//		setHead(joint);
-//	} else if (jointType == "ShoulderLeft") {
-//		setShoulderLeft(joint);
-//	} else if (jointType == "ElbowLeft") {
-//		setElbowLeft(joint);
-//	} else if (jointType == "WristLeft") {
-//		setWristLeft(joint);
-//	} else if (jointType == "HandLeft") {
-//		setHandLeft(joint);
-//	} else if (jointType == "ShoulderRight") {
-//		setShoulderRight(joint);
-//	} else if (jointType == "ElbowRight") {
-//		setElbowRight(joint);
-//	} else if (jointType == "WristRight") {
-//		setWristRight(joint);
-//	} else if (jointType == "HandRight") {
-//		setHandRight(joint);
-//	} else if (jointType == "HipLeft") {
-//		setHipLeft(joint);
-//	} else if (jointType == "KneeLeft") {
-//		setKneeLeft(joint);
-//	} else if (jointType == "AnkleLeft") {
-//		setAnkleLeft(joint);
-//	} else if (jointType == "FootLeft") {
-//		setFootLeft(joint);
-//	} else if (jointType == "HipRight") {
-//		setHipRight(joint);
-//	} else if (jointType == "KneeRight") {
-//		setKneeRight(joint);
-//	} else if (jointType == "AnkleRight") {
-//		setAnkleRight(joint);
-//	} else if (jointType == "FootRight") {
-//		setFootRight(joint);
-//	} else if (jointType == "SpineShoulder") {
-//		setSpineShoulder(joint);
-//	} else if (jointType == "HandTipLeft") {
-//		setHandTipLeft(joint);
-//	} else if (jointType == "ThumbLeft") {
-//		setThumbLeft(joint);
-//	} else if (jointType == "HandTipRight") {
-//		setHandTipRight(joint);
-//	}
+    joints[jointType]->clone(&joint);
+
+//    pts[jointType] = joints[jointType]->getPoint();
+    
+//    if(recording){
+//        if (jointType == "ThumbRight") {
+//            saveSk.ThumbRight = joints[jointType]->getPoint();
+//        } else if (jointType == "SpineBase") {
+//            saveSk.SpineBase = joints[jointType]->getPoint();
+//        } else if (jointType == "SpineMid") {
+//            saveSk.SpineMid = joints[jointType]->getPoint();
+//        } else if (jointType == "Neck") {
+//            saveSk.Neck = joints[jointType]->getPoint();
+//        } else if (jointType == "Head") {
+//            saveSk.Head = joints[jointType]->getPoint();
+//        } else if (jointType == "ShoulderLeft") {
+//            saveSk.ShoulderLeft = joints[jointType]->getPoint();
+//        } else if (jointType == "ElbowLeft") {
+//            saveSk.ElbowLeft = joints[jointType]->getPoint();
+//        } else if (jointType == "WristLeft") {
+//            saveSk.WristLeft = joints[jointType]->getPoint();
+//        } else if (jointType == "HandLeft") {
+//            saveSk.HandLeft = joints[jointType]->getPoint();
+//        } else if (jointType == "ShoulderRight") {
+//            saveSk.ShoulderRight = joints[jointType]->getPoint();
+//        } else if (jointType == "ElbowRight") {
+//            saveSk.ElbowRight = joints[jointType]->getPoint();
+//        } else if (jointType == "WristRight") {
+//            saveSk.WristRight = joints[jointType]->getPoint();
+//        } else if (jointType == "HandRight") {
+//            saveSk.HandRight = joints[jointType]->getPoint();
+//        } else if (jointType == "HipLeft") {
+//            saveSk.HipLeft = joints[jointType]->getPoint();
+//        } else if (jointType == "KneeLeft") {
+//            saveSk.KneeLeft = joints[jointType]->getPoint();
+//        } else if (jointType == "AnkleLeft") {
+//            saveSk.AnkleLeft = joints[jointType]->getPoint();
+//        } else if (jointType == "FootLeft") {
+//            saveSk.FootLeft = joints[jointType]->getPoint();
+//        } else if (jointType == "HipRight") {
+//            saveSk.HipRight = joints[jointType]->getPoint();
+//        } else if (jointType == "KneeRight") {
+//            saveSk.KneeRight = joints[jointType]->getPoint();
+//        } else if (jointType == "AnkleRight") {
+//            saveSk.AnkleRight = joints[jointType]->getPoint();
+//        } else if (jointType == "FootRight") {
+//            saveSk.FootRight = joints[jointType]->getPoint();
+//        } else if (jointType == "SpineShoulder") {
+//            saveSk.SpineShoulder = joints[jointType]->getPoint();
+//        } else if (jointType == "HandTipLeft") {
+//            saveSk.HandTipLeft = joints[jointType]->getPoint();
+//        } else if (jointType == "ThumbLeft") {
+//            saveSk.ThumbLeft = joints[jointType]->getPoint();
+//        } else if (jointType == "HandTipRight") {
+//            saveSk.HandTipRight = joints[jointType]->getPoint();
+//        }
+//    }
+    
+    resetFreshness();
 }
 
 Hand Skeleton::getLeftHand() {
-	return *hands["Left"];
+    return *hands["Left"];
 }
 
 Hand Skeleton::getRightHand() {
-	return *hands["Right"];
+    return *hands["Right"];
 }
 
 string Skeleton::getBodyId() {
-	return bodyId;
+    return bodyId;
 }
 
 Joint Skeleton::getThumbRight() {
-	return *joints["ThumbRight"];
+    return *joints["ThumbRight"];
 }
 
 Joint Skeleton::getSpineBase() {
-	return *joints["SpineBase"];
+    return *joints["SpineBase"];
 }
 
 Joint Skeleton::getSpineMid() {
-	return *joints["SpineMid"];
+    return *joints["SpineMid"];
 }
 
 Joint Skeleton::getNeck() {
-	return *joints["Neck"];
+    return *joints["Neck"];
 }
 
 Joint Skeleton::getHead() {
-	return *joints["Head"];
+    return *joints["Head"];
 }
 
 Joint Skeleton::getShoulderLeft() {
-	return *joints["ShoulderLeft"];
+    return *joints["ShoulderLeft"];
 }
 
 Joint Skeleton::getElbowLeft() {
-	return *joints["ElbowLeft"];
+    return *joints["ElbowLeft"];
 }
 
 Joint Skeleton::getWristLeft() {
-	return *joints["WristLeft"];
+    return *joints["WristLeft"];
 }
 
 Joint Skeleton::getHandLeft() {
-	return *joints["HandLeft"];
+    return *joints["HandLeft"];
 }
 
 Joint Skeleton::getShoulderRight() {
@@ -189,59 +193,59 @@ Joint Skeleton::getShoulderRight() {
 }
 
 Joint Skeleton::getElbowRight() {
-	return *joints["ElbowRight"];
+    return *joints["ElbowRight"];
 }
 
 Joint Skeleton::getWristRight() {
-	return *joints["WristRight"];
+    return *joints["WristRight"];
 }
 
 Joint Skeleton::getHandRight() {
-	return *joints["HandRight"];
+    return *joints["HandRight"];
 }
 
 Joint Skeleton::getHipLeft() {
-	return *joints["HipLeft"];
+    return *joints["HipLeft"];
 }
 
 Joint Skeleton::getKneeLeft() {
-	return *joints["KneeLeft"];
+    return *joints["KneeLeft"];
 }
 
 Joint Skeleton::getAnkleLeft() {
-	return *joints["AnkleLeft"];
+    return *joints["AnkleLeft"];
 }
 
 Joint Skeleton::getFootLeft() {
-	return *joints["FootLeft"];
+    return *joints["FootLeft"];
 }
 
 Joint Skeleton::getHipRight() {
-	return *joints["HipRight"];
+    return *joints["HipRight"];
 }
 
 Joint Skeleton::getKneeRight() {
-	return *joints["KneeRight"];
+    return *joints["KneeRight"];
 }
 
 Joint Skeleton::getAnkleRight() {
-	return *joints["AnkleRight"];
+    return *joints["AnkleRight"];
 }
 
 Joint Skeleton::getFootRight() {
-	return *joints["FootRight"];
+    return *joints["FootRight"];
 }
 
 Joint Skeleton::getSpineShoulder() {
-	return *joints["SpineShoulder"];
+    return *joints["SpineShoulder"];
 }
 
 Joint Skeleton::getHandTipLeft() {
-	return *joints["HandTipLeft"];
+    return *joints["HandTipLeft"];
 }
 
 Joint Skeleton::getThumbLeft() {
-	return *joints["ThumbLeft"];
+    return *joints["ThumbLeft"];
 }
 
 Joint Skeleton::getHandTipRight() {
@@ -262,7 +266,7 @@ ofVec2f Skeleton::getLeftHandNormal() {
 
 ofVec2f Skeleton::getRightHandNormal() {
     return interpreter.rightHandNormal(joints["HandRight"], joints["SpineSholder"], joints["ShoulderRight"]);
-
+    
 }
 
 //void Skeleton::setJoint(Joint &joint){
@@ -271,37 +275,44 @@ ofVec2f Skeleton::getRightHandNormal() {
 
 
 void Skeleton::setLeftHand(Hand &hand) {
-    leftHand.clone(&hand);
+    hands["Left"]->clone(&hand);
+    
     resetFreshness();
 }
 
 void Skeleton::setRightHand(Hand &hand) {
-    rightHand.clone(&hand);
+    hands["Right"]->clone(&hand);
+    
     resetFreshness();
 }
 
 void Skeleton::setThumbRight(Joint &joint) {
-    thumbRight.clone(&joint, smoothing);
+    joints[joint.getType()]->clone(&joint, smoothing);
+    
     resetFreshness();
 }
 
 void Skeleton::setSpineBase(Joint &joint) {
-    spineBase.clone(&joint, smoothing);
+    joints[joint.getType()]->clone(&joint, smoothing);
+    //    spineBase.clone(&joint, smoothing);
     resetFreshness();
 }
 
 void Skeleton::setSpineMid(Joint &joint) {
-    spineMid.clone(&joint, smoothing);
+    joints[joint.getType()]->clone(&joint, smoothing);
+    
     resetFreshness();
 }
 
 void Skeleton::setNeck(Joint &joint) {
-    neck.clone(&joint, smoothing);
+    joints[joint.getType()]->clone(&joint, smoothing);
+    
     resetFreshness();
 }
 
 void Skeleton::setHead(Joint &joint) {
-    head.clone(&joint, smoothing);
+    joints[joint.getType()]->clone(&joint, smoothing);
+    
     resetFreshness();
 }
 
@@ -311,96 +322,101 @@ void Skeleton::setShoulderLeft(Joint &joint) {
 }
 
 void Skeleton::setElbowLeft(Joint &joint) {
-    elbowLeft.clone(&joint, smoothing);
+    joints[joint.getType()]->clone(&joint, smoothing);
+    
     resetFreshness();
 }
 
 void Skeleton::setWristLeft(Joint &joint) {
-    wristLeft.clone(&joint, smoothing);
+    joints[joint.getType()]->clone(&joint, smoothing);
+    
     resetFreshness();
 }
 
 void Skeleton::setHandLeft(Joint &joint) {
-    handLeft.clone(&joint, smoothing);
+    joints[joint.getType()]->clone(&joint, smoothing);
+    
     resetFreshness();
 }
 
 void Skeleton::setShoulderRight(Joint &joint) {
-    shoulderRight.clone(&joint, smoothing);
+    joints[joint.getType()]->clone(&joint, smoothing);
+    
     resetFreshness();
 }
 
 void Skeleton::setElbowRight(Joint &joint) {
-    elbowRight.clone(&joint, smoothing);
+    joints[joint.getType()]->clone(&joint, smoothing);
+    
     resetFreshness();
 }
 
 void Skeleton::setWristRight(Joint &joint) {
-    wristRight.clone(&joint, smoothing);
+    joints[joint.getType()]->clone(&joint, smoothing);
     resetFreshness();
 }
 
 void Skeleton::setHandRight(Joint &joint) {
-    handRight.clone(&joint, smoothing);
+    joints[joint.getType()]->clone(&joint, smoothing);
     resetFreshness();
 }
 
 void Skeleton::setHipLeft(Joint &joint) {
-    hipLeft.clone(&joint, smoothing);
+    joints[joint.getType()]->clone(&joint, smoothing);
     resetFreshness();
 }
 
 void Skeleton::setKneeLeft(Joint &joint) {
-    kneeLeft.clone(&joint, smoothing);
+    joints[joint.getType()]->clone(&joint, smoothing);
     resetFreshness();
 }
 
 void Skeleton::setAnkleLeft(Joint &joint) {
-    ankleLeft.clone(&joint, smoothing);
+    joints[joint.getType()]->clone(&joint, smoothing);
     resetFreshness();
 }
 
 void Skeleton::setFootLeft(Joint &joint) {
-    footLeft.clone(&joint, smoothing);
+    joints[joint.getType()]->clone(&joint, smoothing);
     resetFreshness();
 }
 
 void Skeleton::setHipRight(Joint &joint) {
-    hipRight.clone(&joint, smoothing);
+    joints[joint.getType()]->clone(&joint, smoothing);
     resetFreshness();
 }
 
 void Skeleton::setKneeRight(Joint &joint) {
-    kneeRight.clone(&joint, smoothing);
+    joints[joint.getType()]->clone(&joint, smoothing);
     resetFreshness();
 }
 
 void Skeleton::setAnkleRight(Joint &joint) {
-    ankleRight.clone(&joint, smoothing);
+    joints[joint.getType()]->clone(&joint, smoothing);
     resetFreshness();
 }
 
 void Skeleton::setFootRight(Joint &joint) {
-    footRight.clone(&joint, smoothing);
+    joints[joint.getType()]->clone(&joint, smoothing);
     resetFreshness();
 }
 
 void Skeleton::setSpineShoulder(Joint &joint) {
-    spineShoulder.clone(&joint, smoothing);
+    joints[joint.getType()]->clone(&joint, smoothing);
     resetFreshness();
 }
 
 void Skeleton::setHandTipLeft(Joint &joint) {
-    handTipLeft.clone(&joint, smoothing);
+    joints[joint.getType()]->clone(&joint, smoothing);
     resetFreshness();
 }
 
 void Skeleton::setThumbLeft(Joint &joint) {
-    thumbLeft.clone(&joint, smoothing);
+    joints[joint.getType()]->clone(&joint, smoothing);
     resetFreshness();
 }
 
 void Skeleton::setHandTipRight(Joint &joint) {
-    handTipRight.clone(&joint, smoothing);
+    joints[joint.getType()]->clone(&joint, smoothing);
     resetFreshness();
 }
