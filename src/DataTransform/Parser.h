@@ -1,7 +1,7 @@
 #pragma once
 #include "ofMain.h"
 #include "../Body/Skeleton.h"
-#include "../Body/Gesture.h"
+#include "Gesture.h"
 #include "ofxOscReceiver.h"
 
 class Parser {
