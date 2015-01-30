@@ -2,6 +2,9 @@
 
 #include "ofMain.h"
 #include "ofxKinectV2OSC.h"
+#include "ofxGui.h"
+#include "ofxMidi.h"
+
 
 class ofApp : public ofBaseApp{
 
@@ -26,4 +29,31 @@ class ofApp : public ofBaseApp{
 		ofTrueTypeFont smallFont, largeFont;
 
 		BodyRenderer renderer;
+    
+        ofEasyCam cam;
+        ofxPanel gui;
+    
+    
+        ofParameter <ofVec3f> boxDim;
+        ofParameter <ofVec3f> boxPosStart;
+        ofParameter <ofVec3f> boxPosEnd;
+        ofParameter < int > nDivisions;
+    
+        ofParameter <ofVec3f> scale;
+        ofParameter <float> rotationX;
+        ofParameter <float> rotationY;
+        ofParameter <float> rotationZ;
+        ofParameter <ofVec3f> offset;
+    
+        vector < bool > bInside;
+    
+        bool bPointInsideBox(ofPoint startPos, ofPoint endPos, ofPoint pt);
+    
+    
+        ofxMidiOut midi;
+    
+    
+    ofSerial ser;
+    
+    
 };

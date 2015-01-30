@@ -33,6 +33,37 @@ void Skeleton::setHand(Hand hand) {
 	}
 }
 
+void Skeleton::transform(ofMatrix4x4 mat){
+    getThumbRight().setPoint(getThumbRight().getPoint() * mat);
+    getSpineBase().setPoint(getSpineBase().getPoint() * mat);
+    getNeck().setPoint(getNeck().getPoint() * mat);
+    getHead().setPoint(getHead().getPoint() * mat);
+    getShoulderLeft().setPoint(getShoulderLeft().getPoint() * mat);
+    getElbowLeft().setPoint(getElbowLeft().getPoint() * mat);
+    getWristLeft().setPoint(getWristLeft().getPoint() * mat);
+    getHandLeft().setPoint(getHandLeft().getPoint() * mat);
+    getShoulderRight().setPoint(getShoulderRight().getPoint() * mat);
+    getElbowRight().setPoint(getElbowRight().getPoint() * mat);
+    getWristLeft().setPoint(getWristLeft().getPoint() * mat);
+    getHandLeft().setPoint(getHandLeft().getPoint() * mat);
+    getShoulderRight().setPoint(getShoulderRight().getPoint() * mat);
+    getElbowRight().setPoint(getElbowRight().getPoint() * mat);
+    getWristRight().setPoint(getWristRight().getPoint() * mat);
+    getHandRight().setPoint(getHandRight().getPoint() * mat);
+    getHipLeft().setPoint(getHipLeft().getPoint() * mat);
+    getKneeLeft().setPoint(getKneeLeft().getPoint() * mat);
+    getAnkleLeft().setPoint(getAnkleLeft().getPoint() * mat);
+    getFootLeft().setPoint(getFootLeft().getPoint() * mat);
+    getHipRight().setPoint(getHipRight().getPoint() * mat);
+    getKneeRight().setPoint(getKneeRight().getPoint() * mat);
+    getAnkleRight().setPoint(getAnkleRight().getPoint() * mat);
+    getFootRight().setPoint(getFootRight().getPoint() * mat);
+    getHandTipLeft().setPoint(getHandTipLeft().getPoint() * mat);
+    getThumbLeft().setPoint(getThumbLeft().getPoint() * mat);
+    getHandTipRight().setPoint(getHandTipRight().getPoint() * mat);
+}
+
+
 void Skeleton::setJoint(Joint joint) {
 	string jointType = joint.getType();
 

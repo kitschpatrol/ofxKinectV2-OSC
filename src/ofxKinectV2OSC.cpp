@@ -5,6 +5,7 @@ void ofxKinectV2OSC::setup(int port, ofTrueTypeFont &_font) {
 	setFont(_font);
 	receiver.setup(port);
 	mapper.mapTo(&skeletons);
+    ofAddListener(mapper.newGesture, this, &ofxKinectV2OSC::triggerGesture);
 }
 
 void ofxKinectV2OSC::update() {
@@ -21,6 +22,10 @@ void ofxKinectV2OSC::setFont(ofTrueTypeFont _font) {
     if(!font.isLoaded()) {
         isDebugEnabled = true;
     }
+}
+
+void  ofxKinectV2OSC::triggerGesture(Gesture& newGest){
+    ofNotifyEvent(newGesture, newGest, this);
 }
 
 vector<Skeleton>* ofxKinectV2OSC::getSkeletons() {

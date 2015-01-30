@@ -52,6 +52,9 @@ public:
     ofRectangle getRightHandRange();
     ofVec2f getLeftHandNormal();
     ofVec2f getRightHandNormal();
+    
+    void transform(ofMatrix4x4 mat);
+    
 
 protected:
     void setLeftHand(Hand &hand);

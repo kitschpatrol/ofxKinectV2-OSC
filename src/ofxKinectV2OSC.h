@@ -18,6 +18,10 @@ public:
     void clearStaleSkeletons();
 	void drawDebug();
 	void toggleDebug();
+    
+    void triggerGesture(Gesture& newGest);
+    
+    ofEvent<Gesture> newGesture;
 
 protected:
 	string buildDebugString();
@@ -31,4 +35,6 @@ protected:
 	vector<Skeleton> skeletons;
 	ofTrueTypeFont font;
 	bool isDebugEnabled;
+    
+
 };

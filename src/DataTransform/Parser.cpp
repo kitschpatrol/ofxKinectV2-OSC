@@ -23,6 +23,8 @@ Joint Parser::parseJoint() {
 	return joint;
 }
 
+
+
 bool Parser::isBody() {
 	return addressTokens[0] == "bodies";
 }
@@ -33,6 +35,42 @@ bool Parser::isJoint() {
 
 bool Parser::isHand() {
 	return addressTokens[2] == "hands";
+}
+
+bool Parser::isGesture(){
+    return addressTokens[0] == "gesture";
+}
+
+float Parser::parseGestureConfidence(){
+    return parseGestureValue();
+}
+
+string Parser::parseGestureName(){
+    return addressTokens[1];
+}
+
+float Parser::parseGestureValue(){
+    if(parseGestureType() == Continuous){
+        return ofToFloat(message.getArgAsString(0));
+    }else{
+        return ofToFloat(message.getArgAsString(1));
+    }
+}
+
+GestureType Parser::parseGestureType(){
+    if(message.getNumArgs() == 2){
+        return Discrete;
+    }else{
+        return Continuous;
+    }
+}
+
+bool Parser::parseGestureTrigger(){
+    if(parseGestureType() == Discrete){
+        return ofToBool(message.getArgAsString(0));
+    }else{
+        return false;
+    }
 }
 
 HandState Parser::parseHandState() {
@@ -85,8 +123,8 @@ void Parser::tokenize(string address) {
 }
 
 ofVec3f Parser::orient(ofVec3f &point){
-	point.x = ofMap(point.x, -1, 1, 0, ofGetWidth());
-	point.y = ofMap(point.y, -1, 1, ofGetHeight(), 0);
+	point.x = ofMap(point.x, -1, 1, 0, 512);
+	point.y = ofMap(point.y, -1, 1, 424, 0);
 	point.z = ofMap(point.z, 0, 2, 30, 10);
 	return point;
 }
