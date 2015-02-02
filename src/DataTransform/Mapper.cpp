@@ -14,14 +14,17 @@ void Mapper::map(ofxOscMessage &_message) {
 			skeleton->setJoint(parser.parseJoint());
 		} else if(parser.isHand()) {
 			skeleton->setHand(parser.parseHand());
+        }else if(parser.isGesture()){
+            Gesture foo;
+            foo.type = parser.parseGestureType();
+            foo.name = parser.parseGestureName();
+            foo.value = parser.parseGestureValue();
+            foo.triggered = parser.parseGestureTrigger();
+            skeleton->gestures[foo.name] = foo;
+            
+            //ofLog()<<foo.name<<" "<<foo.value<<endl;
+
         }
-    }else if(parser.isGesture()){
-        Gesture foo;
-        foo.name = parser.parseGestureName();
-        foo.value = parser.parseGestureValue();
-        foo.type = parser.parseGestureType();
-        foo.triggered = parser.parseGestureTrigger();
-        ofNotifyEvent(newGesture, foo, this);
     }
 }
 

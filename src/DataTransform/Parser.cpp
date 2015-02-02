@@ -38,7 +38,7 @@ bool Parser::isHand() {
 }
 
 bool Parser::isGesture(){
-    return addressTokens[0] == "gesture";
+    return addressTokens[2] == "gesture";
 }
 
 float Parser::parseGestureConfidence(){
@@ -46,7 +46,7 @@ float Parser::parseGestureConfidence(){
 }
 
 string Parser::parseGestureName(){
-    return addressTokens[1];
+    return addressTokens[3];
 }
 
 float Parser::parseGestureValue(){
@@ -58,7 +58,7 @@ float Parser::parseGestureValue(){
 }
 
 GestureType Parser::parseGestureType(){
-    if(message.getNumArgs() == 2){
+    if(message.getNumArgs() > 1){
         return Discrete;
     }else{
         return Continuous;

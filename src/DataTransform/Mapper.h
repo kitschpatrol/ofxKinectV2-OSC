@@ -23,4 +23,5 @@ protected:
 	SmoothingTechnique defaultSmoothing;
     
  
+    unsigned long long diffTime;
 };

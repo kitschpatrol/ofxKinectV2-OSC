@@ -3,6 +3,7 @@
 #include "Interpreter.h"
 #include "Joint.h"
 #include "Hand.h"
+#include "Gesture.h"
 
 const int MAX_FRESHNESS = 12;
 
@@ -54,8 +55,7 @@ public:
     ofVec2f getRightHandNormal();
     
     void transform(ofMatrix4x4 mat);
-    
-
+    map<string, Gesture> gestures;
 protected:
     void setLeftHand(Hand &hand);
     void setRightHand(Hand &hand);

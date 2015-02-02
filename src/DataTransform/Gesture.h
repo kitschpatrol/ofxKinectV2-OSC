@@ -15,6 +15,7 @@ enum GestureType{
 
 class Gesture{
 public:
+    void setup(string name, float value, bool triggered);
     string name;
     float value;
     bool triggered;
