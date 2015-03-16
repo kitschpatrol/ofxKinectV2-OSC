@@ -19,6 +19,10 @@ void ofxKinectV2OSC::update() {
     clearStaleSkeletons();
 }
 
+ofQuaternion ofxKinectV2OSC::getQuaternion(){
+    return mapper.getKinectOrientation();
+}
+
 void ofxKinectV2OSC::setSmoothing(SmoothingTechnique technique) {
 	mapper.setSmoothing(technique);
 }

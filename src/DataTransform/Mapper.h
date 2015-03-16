@@ -11,8 +11,9 @@ public:
 	void map(ofxOscMessage &_message);
 	void refresh();
 	void setSmoothing(SmoothingTechnique technique);
-
+    ofVec3f getFloorPlane();
     ofEvent<Gesture> newGesture;
+    ofQuaternion getKinectOrientation();
 protected:
 	Skeleton* getSkeleton(string id);
 	Skeleton* newSkeleton(string id);
@@ -21,7 +22,7 @@ protected:
 	vector<Skeleton>* skeletons;
 	Parser parser;
 	SmoothingTechnique defaultSmoothing;
-    
+    ofVec3f floorNormal;
  
     unsigned long long diffTime;
 };

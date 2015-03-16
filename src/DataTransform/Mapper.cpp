@@ -25,8 +25,24 @@ void Mapper::map(ofxOscMessage &_message) {
             //ofLog()<<foo.name<<" "<<foo.value<<endl;
 
         }
+    }else if(parser.isFloor()){
+        floorNormal = parser.parseFloorPlane();
+        //ofLog()<<floorNormal<<endl;
     }
 }
+
+ofVec3f Mapper::getFloorPlane(){
+    return floorNormal;
+}
+
+ofQuaternion Mapper::getKinectOrientation(){
+    ofQuaternion quad;
+    ofVec3f x = ofVec3f(1, 0, 0);
+    ofVec3f crossed = x.crossed(getFloorPlane());
+    quad.makeRotate(ofPoint(0, 0, 1), crossed);
+    return quad;
+}
+
 
 void Mapper::refresh() {
 	skeletons->clear();

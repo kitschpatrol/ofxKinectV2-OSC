@@ -23,6 +23,9 @@ Joint Parser::parseJoint() {
 	return joint;
 }
 
+bool Parser::isFloor(){
+    return addressTokens[0] == "floor";
+}
 
 
 bool Parser::isBody() {
@@ -63,6 +66,11 @@ GestureType Parser::parseGestureType(){
     }else{
         return Continuous;
     }
+}
+
+ofVec3f Parser::parseFloorPlane(){
+    ofVec3f floorPlane(message.getArgAsFloat(0), message.getArgAsFloat(1), message.getArgAsFloat(2));
+    return floorPlane;
 }
 
 bool Parser::parseGestureTrigger(){

@@ -21,7 +21,7 @@ public:
 	void toggleDebug();
     
     void triggerGesture(Gesture& newGest);
-    
+    ofQuaternion getQuaternion();
     ofEvent<Gesture> newGesture;
 
 protected:

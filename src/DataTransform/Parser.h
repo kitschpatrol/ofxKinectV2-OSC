@@ -12,6 +12,7 @@ public:
     Hand parseHand();
     Joint parseJoint();
     
+    bool isFloor();
     bool isBody();
     bool isJoint();
     bool isHand();
@@ -21,6 +22,7 @@ public:
     float parseGestureValue();
     GestureType parseGestureType();
     bool parseGestureTrigger();
+    ofVec3f parseFloorPlane();
     string parseGestureName();
     
 protected:
