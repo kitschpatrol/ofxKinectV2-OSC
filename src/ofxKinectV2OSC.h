@@ -1,4 +1,5 @@
 #pragma once
+
 #include "ofMain.h"
 #include "DataTransform/Logger.h"
 #include "DataTransform/Mapper.h"
@@ -7,34 +8,30 @@
 
 class ofxKinectV2OSC {
 public:
-	void setup(int port, ofTrueTypeFont &_font);
-	void update();
-	void setSmoothing(SmoothingTechnique technique);
-    void setFont(ofTrueTypeFont _font);
-	vector<Skeleton>* getSkeletons();
-    Skeleton* getNearestSkeleton();
-    bool hasSkeletons();
-    void parseOscMessages();
-    void clearStaleSkeletons();
-	void drawDebug();
-	void toggleDebug();
-    
-    void triggerGesture(Gesture& newGest);
-    
-    ofEvent<Gesture> newGesture;
+  void setup(int port);
+  void update();
+  void setSmoothing(SmoothingTechnique technique);
+  vector<Skeleton> *getSkeletons();
+  Skeleton *getNearestSkeleton();
+  bool hasSkeletons();
+  void parseOscMessages();
+  void clearStaleSkeletons();
+  void drawDebug();
+  void toggleDebug();
+  void triggerGesture(Gesture &newGest);
+  ofEvent<Gesture> newGesture;
 
 protected:
-	string buildDebugString();
-	string parseLogger();
+  string buildDebugString();
+  string parseLogger();
 
-	ofxOscReceiver receiver;
-	ofxOscMessage lastMessage;
-	string lastParsedMessage;
-	Logger logger;
-	Mapper mapper;
-	vector<Skeleton> skeletons;
-	ofTrueTypeFont font;
-	bool isDebugEnabled;
-    
-
+  
+  int listeningPort;
+  ofxOscReceiver receiver;
+  ofxOscMessage lastMessage;
+  string lastParsedMessage;
+  Logger logger;
+  Mapper mapper;
+  vector<Skeleton> skeletons;
+  bool isDebugEnabled;
 };
