@@ -4,7 +4,7 @@
 
 class BodyRenderer {
 public:
-    virtual void setup(vector<Skeleton>* _skeletons);
+  virtual void setup(vector<Skeleton>* _skeletons);
     virtual void setup(vector<Skeleton>* _skeletons, ofTrueTypeFont _font);
     void draw();
     void loadFont(ofTrueTypeFont _font);
