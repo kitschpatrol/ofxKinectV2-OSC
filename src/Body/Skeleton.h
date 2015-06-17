@@ -2,6 +2,7 @@
 #include "ofMain.h"
 #include "Interpreter.h"
 #include "Joint.h"
+#include "Bone.h"
 #include "Hand.h"
 #include "Gesture.h"
 
@@ -57,10 +58,12 @@ public:
   void transform(ofMatrix4x4 mat);
   map<string, Gesture> gestures;
 
+  vector<Bone> *getBones();
   vector<Joint> *getJoints();
 
 protected:
   vector<Joint> joints;
+  vector<Bone> bones;
 
   void setLeftHand(Hand &hand);
   void setRightHand(Hand &hand);

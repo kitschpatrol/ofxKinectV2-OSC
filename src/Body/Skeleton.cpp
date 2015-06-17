@@ -3,6 +3,7 @@
 void Skeleton::init(string _bodyId) {
   bodyId = _bodyId;
   joints.resize(25);
+  // TODO bones?
   resetFreshness();
 }
 
